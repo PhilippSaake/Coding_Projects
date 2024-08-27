@@ -91,7 +91,7 @@ def find_vev(l,b,g,k,mu):
         potential_full_one_loop(l, b, g, k, mu)(x2))][0])
 
 def potential_norm_one_loop(l,b,g,k,mu):
-    """Returns the normalized potential to be zero at the vev, given the 
+    """Returns the normalized potential to be zero at the vev, with fixed 
     dimensionless couplings and still depending on S
     """
     return(lambda S: potential_full_one_loop(l, b, g, k, mu)(S)
