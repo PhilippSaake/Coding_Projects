@@ -101,7 +101,7 @@ def handle(conn, addr):
 def broadcastMessage(message):
     for client in clients:
         client.send(message)
-    print(message)
+    #print(message) print message for debugging and tracking operations
 
 
 # call the method to

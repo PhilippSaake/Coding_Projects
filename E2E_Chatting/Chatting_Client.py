@@ -259,7 +259,8 @@ class GUI:
         while True:
             try:
                 message = client.recv(1024)
-                print(message)
+                #print(message) # print statement for debugging and tracking
+                # messages
 
                 # if the messages from the server is NAME send the client's name
                 if message.decode(FORMAT) == 'NAME':
