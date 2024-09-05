@@ -66,7 +66,10 @@ def encode_message(message):
 def decode_message(message):
     key = load_key()
     f = Fernet(key)
-    return(f.decrypt(message).decode(FORMAT))
+    try:
+        return(f.decrypt(message).decode(FORMAT))
+    except:
+        return("Message could not be decoded.")
 
 
 # GUI class for the chat
