@@ -8,7 +8,8 @@ The client connects by giving a "name" and a password.
 The password generates a key in a keyfile to en- and decrypt the messages
 when sent and recieved.
 
-So far, having the wrong password breaks the application...
+Having the wrong password does not let you see the others messages, instead
+you get the message that the incoming message could not be decoded.
 
 How to use:
 Change IP and Port as desired and correct for server in both 
@@ -22,7 +23,3 @@ To-Do:
 1. remove hardcoded IP for server and make it more interactive on 
 	1.1. server
 	1.2. client
-
-2. Handling wrong passwords better
-	2.1. what breaks, server or client? --> client?
-	2.2. how to exclude clients with wrong passwords, without disrupting others?
