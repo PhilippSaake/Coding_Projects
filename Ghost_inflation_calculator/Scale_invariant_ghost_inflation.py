@@ -31,17 +31,13 @@ mPl_red = 1.220890*10**19  / np.sqrt(8 * np.pi)
 # Defining the effective potential in terms of their tree level contributions
 # and their field dependent masses
 # ! Capital letters -> fields, lower-case -> dimensionless couplings !
+
 ## Tree-level classical scale invariant potential --> 1 scalar self interaction
 def potential_tree_level(l):
     return(lambda S: 0.25 * l * S**4)
     
 ## Field dependent mass-squares from the contributions including all scale-invariant
 ## terms from the tree level Lagrangian curvature contractions (= m_i^2)
-
-# appearently not needed in the newest version
-#def field_mass_gamma(S,b,g):
-#    return(b * S**2 / 12 / g)
-
 def field_mass_kappa(b,k):
     return(lambda S : b * S**2 / 4 / k)
 
@@ -90,9 +86,38 @@ def find_vev(l,b,g,k,mu):
     return(x2[np.where(min(potential_full_one_loop(l, b, g, k, mu)(x2)) ==
         potential_full_one_loop(l, b, g, k, mu)(x2))][0])
 
-def potential_norm_one_loop(l,b,g,k,mu):
+def potential_norm_one_loop(l,b,g,k,mu,vev):
     """Returns the normalized potential to be zero at the vev, with fixed 
-    dimensionless couplings and still depending on S
+    dimensionless couplings and still depending on S.
+    To calculate, use find_vev(). As we need the vev for multiple calculations
+    I chose to parse it in this function.
     """
     return(lambda S: potential_full_one_loop(l, b, g, k, mu)(S)
-           - potential_full_one_loop(l, b, g, k, mu)(find_vev(l, b, g, k, mu)))
+           - potential_full_one_loop(l, b, g, k, mu)(vev))
+
+# Some more calculations now for the potential after symmetry breaking and thus
+# depending on the generated vev
+## Planck mass
+def mass_planck(b,vev):
+    """Calculates the Planck masses value in dependence of the renormalization 
+    scheme and therefore its scale.
+    """
+    return(np.sqrt(b) * vev)
+
+## B, A as shorthand functions for the potential after conformal transformation
+## to the Einstein frame, but dependent on the field S
+def factor_B(b,mu,mpl):
+    return(lambda S: mu**2 * b * S**2 / mpl**2)
+    
+def factor_A(l, b, g, k, mu, vev, mpl):
+    return(lambda S: 4 * g * potential_norm_one_loop(l, b, g, k, mu, vev)(S)
+           / factor_B(b, mu, mpl)(S)**2 / mpl**4)
+
+
+# Defining the final form of the inflation potential
+def potential_inflation(l, b, g, k, mu, vev, mpl):
+    return(lambda S: potential_norm_one_loop(l, b, g, k, mu, vev)(S) / 
+           (1 + 4 * factor_A(l, b, g, k, mu, vev, mpl)(S))
+           / factor_B(b, mu, mpl)(S)**2)
+
+
